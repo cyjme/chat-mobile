@@ -13,7 +13,7 @@ export default new Router({
       component: ContactList,
     },
     {
-      path: '/chat',
+      path: '/chat/:token/:toToken',
       name: 'Chat',
       component: Chat,
     },

@@ -8,126 +8,22 @@
         </div>
         
         <div id="friends">
-        	<div class="friend">
+
+        	<div class="friend" v-for="contact in contacts" :key="contact.token" @click="handleClick(contact.token)">
             	<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/1_copy.jpg" />
                 <p>
-                	<strong>Miro Badev</strong>
-	                <span>mirobadev@gmail.com</span>
+                	<strong>{{contact.name}}</strong>
+                    <br />
+	                <span>{{contact.info}}</span>
                 </p>
                 <div class="status available"></div>
             </div>
-            
-            <div class="friend">
-            	<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/2_copy.jpg" />
-                <p>
-                	<strong>Martin Joseph</strong>
-	                <span>marjoseph@gmail.com</span>
-                </p>
-                <div class="status away"></div>
-            </div>
-            
-            <div class="friend">
-            	<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/3_copy.jpg" />
-                <p>
-                	<strong>Tomas Kennedy</strong>
-	                <span>tomaskennedy@gmail.com</span>
-                </p>
-                <div class="status inactive"></div>
-            </div>
-            
-            <div class="friend">
-            	<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/4_copy.jpg" />
-                <p>
-                	<strong>Enrique	Sutton</strong>
-	                <span>enriquesutton@gmail.com</span>
-                </p>
-                <div class="status inactive"></div>
-            </div>
-            
-            <div class="friend">
-            	<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/5_copy.jpg" />
-                <p>
-                <strong>	Darnell	Strickland</strong>
-	                <span>darnellstrickland@gmail.com</span>
-                </p>
-                <div class="status inactive"></div>
-            </div>
-            
-            <div id="search">
-	            <input type="text" id="searchfield" value="Search contacts..." />
-            </div>
-            
-        </div>                
-        
-    </div>	
-    
-    <div id="chatview" class="p1">    	
-        <div id="profile">
 
-            <div id="close">
-                <div class="cy"></div>
-                <div class="cx"></div>
+            <div id="search">
+	            <input type="text" id="searchfield" placeholder="Search contacts..." />
             </div>
-            
-            <p>Miro Badev</p>
-            <span>miro@badev@gmail.com</span>
-        </div>
-        <div id="chat-messages">
-        	<label>Thursday 02</label>
-            
-            <div class="message">
-            	<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/1_copy.jpg" />
-                <div class="bubble">
-                	Really cool stuff!
-                    <div class="corner"></div>
-                    <span>3 min</span>
-                </div>
-            </div>
-            
-            <div class="message right">
-            	<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/2_copy.jpg" />
-                <div class="bubble">
-                	Can you share a link for the tutorial?
-                    <div class="corner"></div>
-                    <span>1 min</span>
-                </div>
-            </div>
-            
-            <div class="message">
-            	<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/1_copy.jpg" />
-                <div class="bubble">
-                	Yeah, hold on
-                    <div class="corner"></div>
-                    <span>Now</span>
-                </div>
-            </div>
-            
-            <div class="message right">
-            	<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/2_copy.jpg" />
-                <div class="bubble">
-                	Can you share a link for the tutorial?
-                    <div class="corner"></div>
-                    <span>1 min</span>
-                </div>
-            </div>
-            
-            <div class="message">
-            	<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/1_copy.jpg" />
-                <div class="bubble">
-                	Yeah, hold on
-                    <div class="corner"></div>
-                    <span>Now</span>
-                </div>
-            </div>
-            
-        </div>
-    	
-        <div id="sendmessage">
-        	<input type="text" value="Send message..." />
-            <button id="send"></button>
-        </div>
-    
-    </div>        
+        </div>                
+    </div>	
 </div>	
 
 </template>
@@ -135,13 +31,56 @@
 <script>
 export default {
   name: "contactList",
+  props: ["contacts", "newMsg"],
   created: function() {
-    console.warn("created");
-    console.warn("token", this.$route.params.accToken);
-    this.axios.get("/test").then(() => {});
+    let userToken = this.$route.params.accToken;
+    // this.axios.get("/test").then(() => {});
+    // var ws = new WebSocket("ws://127.0.0.1:9009");
+    var ws = new WebSocket("ws://192.168.99.100:9503");
+    ws.onopen = function(evt) {
+      console.log("Connection open ...");
+      var data = JSON.stringify({
+        type: "login",
+        token: userToken
+      });
+      ws.send(data);
+    };
+
+    let newMsg = this.newMsg
+    ws.onmessage = function(evt) {
+      let msg = JSON.parse(evt.data);
+      console.warn("msgggg", msg);
+
+      newMsg({
+        msgId: new Date(),
+        type: "im",
+        contentType: "text",
+        content: msg.content,
+        from: msg.fromAccToken,
+        to: msg.toAccToken
+      });
+    };
+
+    ws.onclose = function(evt) {
+      console.log("Connection closed.");
+    };
+  },
+  methods: {
+    handleClick(token) {
+      let userToken = this.$route.params.accToken;
+      console.warn("toknnnn", token);
+      this.$router.push({
+        name: "Chat",
+        params: {
+          token: userToken,
+          toToken: token
+        }
+      });
+    }
   }
 };
 </script>
 
 <style>
+
 </style>
