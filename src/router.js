@@ -8,7 +8,7 @@ Vue.use(Router);
 export default new Router({
   routes: [
     {
-      path: '/user/:accToken',
+      path: '/user/:token',
       name: 'ContactList',
       component: ContactList,
     },

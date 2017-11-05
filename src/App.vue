@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <router-view :contacts="contacts" :newMsg="newMsg"/>
+    <router-view :contacts="contacts" :newMsg="newMsg" :sendMsg="sendMsg"/>
   </div>
 </template>
 
@@ -9,6 +9,7 @@ export default {
   name: "app",
   data() {
     return {
+      ws: null,
       contacts: [
         {
           token: "acc-598d2337a4aab",
@@ -60,15 +61,44 @@ export default {
   },
   methods: {
     newMsg: function(msg) {
-      console.warn("recivemsg", msg);
       this.contacts.map((item, index) => {
         if (item.token === msg.to) {
           this.contacts[index].msgs.push(msg);
         }
       });
+    },
+    sendMsg: function(msg){
+      this.ws.send(JSON.stringify(msg))
     }
   },
   created: function() {
+    let userToken = this.$route.params.token
+    this.ws = new WebSocket("ws://127.0.0.1:9009");
+    // var ws = new WebSocket("ws://192.168.99.100:9503");
+    this.ws.onopen = (evt)=> {
+      var data = JSON.stringify({
+        type: "login",
+        token: userToken
+      });
+      this.ws.send(data);
+    };
+
+    this.ws.onmessage = (evt)=> {
+      let msg = JSON.parse(evt.data);
+
+      this.newMsg({
+        msgId: msg.Id,
+        type: "im",
+        contentType: "text",
+        content: msg.content,
+        from: msg.from,
+        to: msg.to
+      });
+    };
+
+    this.ws.onclose = function(evt) {
+      console.log("Connection closed.");
+    };
   }
 };
 </script>

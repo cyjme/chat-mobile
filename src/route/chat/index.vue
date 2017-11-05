@@ -70,7 +70,7 @@
     	
         <div id="sendmessage">
         	<input type="text" v-model="inputText" placeholder="please Input" />
-            <button id="send" @click="sendMsg"></button>
+            <button id="send" @click="handleClickSend"></button>
         </div>
     
     </div>        
@@ -82,7 +82,7 @@
 <script>
 export default {
   name: "chat",
-  props: ["contacts","newMsg"],
+  props: ["contacts","newMsg","sendMsg"],
   methods:{
     goToContacts: function(){
       this.$router.push({
@@ -92,9 +92,16 @@ export default {
         }
       });
     },
-    sendMsg:function(){
+    handleClickSend:function(){
       this.newMsg({
         msgId:new Date(),
+        type:"im",
+        contentType:"text",
+        content:this.inputText,
+        from:this.from,
+        to:this.to
+      })
+      this.sendMsg({
         type:"im",
         contentType:"text",
         content:this.inputText,
@@ -114,10 +121,6 @@ export default {
     };
   },
   created: function() {
-    console.warn("start chat");
-    console.warn("token", this.$route.params.token);
-    console.warn("toToken", this.$route.params.toToken);
-    console.warn("cccc",this.contacts)
     this.contacts.map(item=>{
       if(item.token==this.from){
         console.warn("iiii",item)

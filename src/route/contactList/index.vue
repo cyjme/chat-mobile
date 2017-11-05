@@ -33,42 +33,12 @@ export default {
   name: "contactList",
   props: ["contacts", "newMsg"],
   created: function() {
-    let userToken = this.$route.params.accToken;
+    let userToken = this.$route.params.token;
     // this.axios.get("/test").then(() => {});
-    // var ws = new WebSocket("ws://127.0.0.1:9009");
-    var ws = new WebSocket("ws://192.168.99.100:9503");
-    ws.onopen = function(evt) {
-      console.log("Connection open ...");
-      var data = JSON.stringify({
-        type: "login",
-        token: userToken
-      });
-      ws.send(data);
-    };
-
-    let newMsg = this.newMsg
-    ws.onmessage = function(evt) {
-      let msg = JSON.parse(evt.data);
-      console.warn("msgggg", msg);
-
-      newMsg({
-        msgId: new Date(),
-        type: "im",
-        contentType: "text",
-        content: msg.content,
-        from: msg.fromAccToken,
-        to: msg.toAccToken
-      });
-    };
-
-    ws.onclose = function(evt) {
-      console.log("Connection closed.");
-    };
   },
   methods: {
     handleClick(token) {
-      let userToken = this.$route.params.accToken;
-      console.warn("toknnnn", token);
+      let userToken = this.$route.params.token;
       this.$router.push({
         name: "Chat",
         params: {
