@@ -257,17 +257,20 @@ body {
 #chatview {
   width: 100%;
   height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  /* display: none; */
+  position: relative;
   background: #fff;
 }
 #profile {
-  height: 153px;
+  position: fixed;
+  height: 180px;
+  width: 100%;
   overflow: hidden;
   text-align: center;
   color: #fff;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
 }
 .p1 #profile {
   background: #fff
@@ -306,10 +309,13 @@ body {
   font-size: 11px;
 }
 #chat-messages {
+  background: white;
+  position: fixed;
+  top: 180px;
+  bottom: 60px;
   opacity: 100;
   margin-top: 0;
   width: 100%;
-  height: 100%;
   overflow-y: scroll;
   overflow-x: hidden;
   padding-right: 20px;
@@ -392,8 +398,8 @@ div.message.right .corner {
 }
 #sendmessage {
   height: 60px;
+  position: fixed;
   border-top: 1px solid #e7ebee;
-  position: absolute;
   bottom: 0;
   right: 0px;
   width: 100%;
