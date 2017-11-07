@@ -8,7 +8,7 @@ import axios from 'axios';
 Vue.config.productionTip = false;
 
 Vue.prototype.axios = axios;
-Vue.prototype.axios.defaults.baseURL = 'https://message.ideapar.com';
+Vue.prototype.axios.defaults.baseURL = 'http://localhost:9009';
 
 /* eslint-disable no-new */
 new Vue({

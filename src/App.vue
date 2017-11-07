@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <router-view :contacts="contacts" :newMsg="newMsg" :sendMsg="sendMsg"/>
+    <div class="connection" :style="{'display':wsConStatus===true?'none':'block'}">连接中...</div>
+    <router-view :contacts="contacts" :newMsg="newMsg" :sendMsg="sendMsg" :loadHistory="loadHistory" :wsConStatus="wsConStatus"/>
   </div>
 </template>
 
@@ -11,54 +12,9 @@ export default {
   name: "app",
   data() {
     return {
+      wsConStatus: false,
       ws: null,
-      contacts: [
-        {
-          token: "acc-598d2337a4aab",
-          name: "Jason",
-          avatar:
-            "https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/1_copy.jpg",
-          info: "13061710381",
-          msgs: [
-            {
-              msgId: "0001",
-              type: "im",
-              content: "你好，在吗?",
-              contentType: "text",
-              from: "acc-598d2337a4aab",
-              to: "acc-598d2337a4aab",
-              created: "04:34"
-            },
-            {
-              msgId: "0001",
-              type: "im",
-              content: "你好，在吗?",
-              contentType: "text",
-              from: "acc-598d2337a4aab",
-              to: "acc-598d2337a4aab",
-              created: "04:34"
-            },
-            {
-              msgId: "0001",
-              type: "im",
-              content: "你好，在吗?",
-              contentType: "text",
-              from: "001",
-              to: "002",
-              created: "04:34"
-            },
-            {
-              msgId: "0001",
-              type: "im",
-              content: "你好，在吗?",
-              contentType: "text",
-              from: "001",
-              to: "002",
-              created: "04:34"
-            }
-          ]
-        },
-      ]
+      contacts: []
     };
   },
   methods: {
@@ -69,36 +25,85 @@ export default {
         }
       });
     },
-    sendMsg: function(msg){
-      this.ws.send(JSON.stringify(msg))
+    sendMsg: function(msg) {
+      this.ws.send(JSON.stringify(msg));
+    },
+    listContacts: function(userToken) {
+      this.axios.get(`/acc/${userToken}/contacts`).then(({ data }) => {
+        data.map(item => {
+          item.msgs = [];
+          this.contacts.push(item);
+        });
+      });
+    },
+    loadHistory: function(accToken, withAccToken) {
+      console.warn("load history");
+      let sinceId = 999999999;
+      this.contacts.map((item, index) => {
+        if (item.token === accToken) {
+          if (item.msgs[0] !== undefined) {
+            sinceId = item.msgs[0].id;
+            console.warn("sinceId", sinceId);
+          }
+        }
+      });
+      let msg = {
+        type: "imAction",
+        actionType: "listHistory",
+        accToken: accToken,
+        withAccToken: withAccToken,
+        sinceId: sinceId,
+        num: 10
+      };
+      if (this.wsConStatus) {
+        this.ws.send(JSON.stringify(msg));
+      }
     }
   },
   created: function() {
-    let userToken = this.$route.params.token
+    let userToken = this.$route.params.token;
+    this.listContacts(userToken);
     this.ws = new ReconnectWebsocket("ws://127.0.0.1:9009");
     // var ws = new WebSocket("ws://192.168.99.100:9503");
-    this.ws.onopen = (evt)=> {
+    this.ws.onopen = evt => {
       var data = JSON.stringify({
         type: "login",
         token: userToken
       });
       this.ws.send(data);
+      this.wsConStatus = true;
     };
 
-    this.ws.onmessage = (evt)=> {
+    this.ws.onmessage = evt => {
       let msg = JSON.parse(evt.data);
 
-      this.newMsg({
-        msgId: msg.Id,
-        type: "im",
-        contentType: "text",
-        content: msg.content,
-        from: msg.from,
-        to: msg.to
-      });
+      if (msg.type == "im") {
+        this.newMsg({
+          msgId: msg.Id,
+          type: "im",
+          contentType: "text",
+          content: msg.content,
+          from: msg.from,
+          to: msg.to,
+          created_at: msg.created_at
+        });
+      }
+      if (msg.type == "imAction") {
+        console.warn("action");
+        let msgs = msg.data;
+        let contactIndex;
+        this.contacts.map((item, index) => {
+          if (item.token == msg.withAccToken) {
+            contactIndex = index;
+          }
+        });
+        msgs.reverse();
+        this.contacts[contactIndex].msgs.unshift(...msgs);
+      }
     };
 
-    this.ws.onclose = function(evt) {
+    this.ws.onclose = evt => {
+      this.wsConStatus = false;
       console.log("Connection closed.");
     };
   }
@@ -148,8 +153,22 @@ body {
 }
 #topmenu {
   height: 69px;
-  width: 290px;
+  width: 100%;
   border-bottom: 1px solid #d8dfe3;
+  background: url("./assets/logo.png") no-repeat;
+  background-position-x: 30px;
+  background-position-y: center;
+  background-size: contain;
+}
+#topmenu .left{
+  float: left;
+  height: 100%;
+  width: 50%;
+}
+#topmenu .right{
+  float: left;
+  height: 100%;
+  width: 50%;
 }
 #topmenu span {
   float: left;
@@ -194,6 +213,7 @@ body {
 }
 .floatingImg {
   width: 68px;
+  height: 68px;
   border-radius: 50%;
   position: absolute;
   top: 32px;
@@ -309,6 +329,7 @@ body {
 #profile span {
   font-weight: 400;
   font-size: 11px;
+  line-height: 30px;
 }
 #chat-messages {
   background: white;
@@ -337,7 +358,7 @@ body {
   font-size: 12px;
   text-align: center;
   margin: 15px 0;
-  width: 290px;
+  width: 100%;
   display: block;
 }
 #chat-messages div.message {
@@ -528,5 +549,17 @@ div.message.right .corner {
 #sendmessage {
   overflow: hidden;
   border-radius: 6px;
+}
+.connection {
+  position: fixed;
+  width: 100%;
+  height: 30px;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  z-index: 100;
+  background: rgba(255, 197, 66, 0.62);
+  text-align: center;
 }
 </style>

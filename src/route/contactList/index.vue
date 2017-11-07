@@ -2,27 +2,26 @@
 <div id="chatbox">
 	<div id="friendslist">
     	<div id="topmenu">
-        	<span class="friends"></span>
-            <span class="chats"></span>
-            <span class="history"></span>
+        <div class="left"></div>
+        <div class="right">
         </div>
-        
-        <div id="friends">
+      </div>
 
-        	<div class="friend" v-for="contact in contacts" :key="contact.token" @click="handleClick(contact.token)">
-            	<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/1_copy.jpg" />
-                <p>
-                	<strong>{{contact.name}}</strong>
-                    <br />
-	                <span>{{contact.info}}</span>
-                </p>
-                <div class="status available"></div>
-            </div>
+      <div id="friends">
+      	<div class="friend" v-for="contact in contacts" :key="contact.token" @click="handleClick(contact.token)">
+          	<img :src="contact.avatar" />
+              <p>
+              	<strong>{{contact.name}}</strong>
+                  <br />
+	              <span>{{contact.info}}</span>
+              </p>
+              <div class="status available"></div>
+          </div>
 
-            <div id="search">
-	            <input type="text" id="searchfield" placeholder="Search contacts..." />
-            </div>
-        </div>                
+          <div id="search">
+	          <input type="text" id="searchfield" placeholder="Search contacts..." />
+          </div>
+      </div>                
     </div>	
 </div>	
 
@@ -32,10 +31,7 @@
 export default {
   name: "contactList",
   props: ["contacts", "newMsg"],
-  created: function() {
-    let userToken = this.$route.params.token;
-    // this.axios.get("/test").then(() => {});
-  },
+  created: function() {},
   methods: {
     handleClick(token) {
       let userToken = this.$route.params.token;
