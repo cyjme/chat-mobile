@@ -25,6 +25,13 @@ export default {
         }
       });
     },
+    newMsgFromServer: function(msg) {
+      this.contacts.map((item, index) => {
+        if (item.token === msg.from) {
+          this.contacts[index].msgs.push(msg);
+        }
+      });
+    },
     sendMsg: function(msg) {
       this.ws.send(JSON.stringify(msg));
     },
@@ -78,7 +85,7 @@ export default {
       let msg = JSON.parse(evt.data);
 
       if (msg.type == "im") {
-        this.newMsg({
+        this.newMsgFromServer({
           msgId: msg.Id,
           type: "im",
           contentType: "text",
@@ -160,41 +167,18 @@ body {
   background-position-y: center;
   background-size: contain;
 }
-#topmenu .left{
+#topmenu .left {
   float: left;
   height: 100%;
   width: 50%;
 }
-#topmenu .right{
+#topmenu .right {
   float: left;
   height: 100%;
   width: 50%;
-}
-#topmenu span {
-  float: left;
-  width: 96px;
-  height: 70px;
-  background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/top-menu.png") -3px -118px
-    no-repeat;
-}
-#topmenu span.friends {
-  margin-bottom: -1px;
-}
-#topmenu span.chats {
-  background-position: -95px 25px;
-  cursor: pointer;
-}
-#topmenu span.chats:hover {
-  background-position: -95px -46px;
-  cursor: pointer;
-}
-#topmenu span.history {
-  background-position: -190px 24px;
-  cursor: pointer;
-}
-#topmenu span.history:hover {
-  background-position: -190px -47px;
-  cursor: pointer;
+  text-align: center;
+  line-height: 69px;
+  font-size: x-large;
 }
 .friend {
   height: 70px;

@@ -4,6 +4,9 @@
     	<div id="topmenu">
         <div class="left"></div>
         <div class="right">
+          <span>
+          {{currentUser.name}}
+          </span>
         </div>
       </div>
 
@@ -42,6 +45,18 @@ export default {
           toToken: token
         }
       });
+    }
+  },
+  computed: {
+    currentUser: function currentUser() {
+      let contact;
+      this.contacts.map((item, index) => {
+        if (item.token === this.$route.params.token) {
+          contact = item;
+        }
+      });
+
+      return contact;
     }
   }
 };

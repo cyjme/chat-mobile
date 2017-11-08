@@ -11,8 +11,8 @@
         </div>
         <div id="chat-messages" v-on:scroll="handleScroll">
         	<label>已经到顶端了</label>
-            <div  v-for="msg in msgList" class="message" :key="msg.msgId">
-            	<img :src="fromUser.avatar" />
+            <div  v-for="msg in msgList" :class="msg.to==to?'message right':'message'" :key="msg.msgId">
+            	<img :src="msg.to == to?fromUser.avatar:toUser.avatar" />
                 <div class="bubble">
                   {{msg.content}}
                     <div class="corner"></div>
@@ -46,10 +46,10 @@ export default {
     };
   },
   methods: {
-    handleScroll: function(){
+    handleScroll: function() {
       let chatMessages = document.getElementById("chat-messages");
-      if(chatMessages.scrollTop=0){
-        this.loadHistory(this.from,this.to)
+      if ((chatMessages.scrollTop = 0)) {
+        this.loadHistory(this.from, this.to);
       }
     },
     goToContacts: function() {
@@ -68,7 +68,7 @@ export default {
         content: this.inputText,
         from: this.from,
         to: this.to,
-        created_at: new Date(),
+        created_at: new Date()
       });
       this.sendMsg({
         type: "im",
