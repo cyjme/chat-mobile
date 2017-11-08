@@ -7,6 +7,7 @@
 
 <script>
 import ReconnectWebsocket from "./ReconnectWebsocket";
+import { scrollBottom } from "./help";
 
 export default {
   name: "app",
@@ -24,6 +25,7 @@ export default {
           this.contacts[index].msgs.push(msg);
         }
       });
+      scrollBottom();
     },
     newMsgFromServer: function(msg) {
       this.contacts.map((item, index) => {
@@ -31,6 +33,7 @@ export default {
           this.contacts[index].msgs.push(msg);
         }
       });
+      scrollBottom();
     },
     sendMsg: function(msg) {
       this.ws.send(JSON.stringify(msg));
@@ -40,6 +43,7 @@ export default {
         data.map(item => {
           item.msgs = [];
           this.contacts.push(item);
+          this.loadHistory(userToken, item.token);
         });
       });
     },
@@ -47,7 +51,8 @@ export default {
       console.warn("load history");
       let sinceId = 999999999;
       this.contacts.map((item, index) => {
-        if (item.token === accToken) {
+        if (item.token === withAccToken) {
+          console.warn("item,message", item);
           if (item.msgs[0] !== undefined) {
             sinceId = item.msgs[0].id;
             console.warn("sinceId", sinceId);
@@ -97,15 +102,17 @@ export default {
       }
       if (msg.type == "imAction") {
         console.warn("action");
-        let msgs = msg.data;
-        let contactIndex;
-        this.contacts.map((item, index) => {
-          if (item.token == msg.withAccToken) {
-            contactIndex = index;
-          }
-        });
-        msgs.reverse();
-        this.contacts[contactIndex].msgs.unshift(...msgs);
+        if (msg.data.length > 0) {
+          let msgs = msg.data;
+          let contactIndex;
+          this.contacts.map((item, index) => {
+            if (item.token == msg.withAccToken) {
+              contactIndex = index;
+            }
+          });
+          msgs.reverse();
+          this.contacts[contactIndex].msgs.unshift(...msgs);
+        }
       }
     };
 

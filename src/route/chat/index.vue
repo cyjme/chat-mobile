@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import {scrollBottom} from "../../help";
 export default {
   name: "chat",
   props: ["contacts", "newMsg", "sendMsg", "loadHistory"],
@@ -48,7 +49,7 @@ export default {
   methods: {
     handleScroll: function() {
       let chatMessages = document.getElementById("chat-messages");
-      if ((chatMessages.scrollTop = 0)) {
+      if ((chatMessages.scrollTop == 0)) {
         this.loadHistory(this.from, this.to);
       }
     },
@@ -113,10 +114,7 @@ export default {
           msgs = item.msgs;
         }
       });
-      if (document.getElementById("chat-messages") != null) {
-        document.getElementById("chat-messages").scrollTop =
-          document.getElementById("chat-messages").scrollHeight + 200;
-      }
+      scrollBottom();
       return msgs;
     },
     profile: function profile() {
