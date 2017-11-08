@@ -5,7 +5,7 @@
         <div class="left"></div>
         <div class="right">
           <span>
-          {{currentUser.name}}
+          {{currentUser==null?"":currentUser.name}}
           </span>
         </div>
       </div>

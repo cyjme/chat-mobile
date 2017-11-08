@@ -75,7 +75,7 @@ export default {
   created: function() {
     let userToken = this.$route.params.token;
     this.listContacts(userToken);
-    this.ws = new ReconnectWebsocket("ws://127.0.0.1:9009");
+    this.ws = new ReconnectWebsocket("wss://msg-server.ideapar.com");
     // var ws = new WebSocket("ws://192.168.99.100:9503");
     this.ws.onopen = evt => {
       var data = JSON.stringify({

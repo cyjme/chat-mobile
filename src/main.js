@@ -4,11 +4,12 @@ import Vue from 'vue';
 import App from './App';
 import router from './router';
 import axios from 'axios';
+import config from './config';
 
 Vue.config.productionTip = false;
 
 Vue.prototype.axios = axios;
-Vue.prototype.axios.defaults.baseURL = 'http://localhost:9009';
+Vue.prototype.axios.defaults.baseURL = config.apiUrl;
 
 /* eslint-disable no-new */
 new Vue({
