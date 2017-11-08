@@ -40,6 +40,7 @@ export default {
     },
     listContacts: function(userToken) {
       this.axios.get(`/acc/${userToken}/contacts`).then(({ data }) => {
+        this.contacts = [];
         data.map(item => {
           item.msgs = [];
           this.contacts.push(item);
