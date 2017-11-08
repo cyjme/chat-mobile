@@ -48,14 +48,11 @@ export default {
       });
     },
     loadHistory: function(accToken, withAccToken) {
-      console.warn("load history");
       let sinceId = 999999999;
       this.contacts.map((item, index) => {
         if (item.token === withAccToken) {
-          console.warn("item,message", item);
           if (item.msgs[0] !== undefined) {
             sinceId = item.msgs[0].id;
-            console.warn("sinceId", sinceId);
           }
         }
       });
@@ -74,7 +71,6 @@ export default {
   },
   created: function() {
     let userToken = this.$route.params.token;
-    this.listContacts(userToken);
     this.ws = new ReconnectWebsocket("wss://msg-server.ideapar.com");
     // var ws = new WebSocket("ws://192.168.99.100:9503");
     this.ws.onopen = evt => {
@@ -84,6 +80,7 @@ export default {
       });
       this.ws.send(data);
       this.wsConStatus = true;
+      this.listContacts(userToken);
     };
 
     this.ws.onmessage = evt => {
@@ -101,7 +98,6 @@ export default {
         });
       }
       if (msg.type == "imAction") {
-        console.warn("action");
         if (msg.data.length > 0) {
           let msgs = msg.data;
           let contactIndex;
