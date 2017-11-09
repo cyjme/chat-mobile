@@ -5,7 +5,7 @@
         <div class="left"></div>
         <div class="right">
           <span>
-          {{currentUser==null?"":currentUser.name}}
+          {{currentUser.name}}
           </span>
         </div>
       </div>
@@ -31,9 +31,10 @@
 </template>
 
 <script>
+import { scrollBottom } from "../../help";
 export default {
   name: "contactList",
-  props: ["contacts", "newMsg"],
+  props: ["contacts", "newMsg", "currentUser"],
   created: function() {},
   methods: {
     handleClick(token) {
@@ -45,18 +46,7 @@ export default {
           toToken: token
         }
       });
-    }
-  },
-  computed: {
-    currentUser: function currentUser() {
-      let contact;
-      this.contacts.map((item, index) => {
-        if (item.token === this.$route.params.token) {
-          contact = item;
-        }
-      });
-
-      return contact;
+      scrollBottom();
     }
   }
 };

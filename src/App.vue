@@ -1,13 +1,14 @@
 <template>
   <div id="app">
     <div class="connection" :style="{'display':wsConStatus===true?'none':'block'}">连接中...</div>
-    <router-view :contacts="contacts" :newMsg="newMsg" :sendMsg="sendMsg" :loadHistory="loadHistory" :wsConStatus="wsConStatus"/>
+    <router-view :contacts="contacts" :newMsg="newMsg" :sendMsg="sendMsg" :loadHistory="loadHistory" :wsConStatus="wsConStatus" :currentUser="currentUser"/>
   </div>
 </template>
 
 <script>
 import ReconnectWebsocket from "./ReconnectWebsocket";
 import { scrollBottom } from "./help";
+import config from "./config";
 
 export default {
   name: "app",
@@ -15,25 +16,38 @@ export default {
     return {
       wsConStatus: false,
       ws: null,
-      contacts: []
+      contacts: [],
+      currentUser: {
+        token: "",
+        name: "",
+        props: "",
+        info: "",
+        avatar: ""
+      }
     };
   },
   methods: {
+    fetchCurrentUser: function(token) {
+      this.axios.get(`/accs/${token}`).then(({ data }) => {
+        this.currentUser = data;
+      });
+    },
     newMsg: function(msg) {
       this.contacts.map((item, index) => {
         if (item.token === msg.to) {
           this.contacts[index].msgs.push(msg);
         }
       });
-      scrollBottom();
     },
     newMsgFromServer: function(msg) {
       this.contacts.map((item, index) => {
         if (item.token === msg.from) {
           this.contacts[index].msgs.push(msg);
         }
+        if (item.token === msg.to) {
+          this.contacts[index].msgs.push(msg);
+        }
       });
-      scrollBottom();
     },
     sendMsg: function(msg) {
       this.ws.send(JSON.stringify(msg));
@@ -72,7 +86,8 @@ export default {
   },
   created: function() {
     let userToken = this.$route.params.token;
-    this.ws = new ReconnectWebsocket("wss://msg-server.ideapar.com");
+    this.fetchCurrentUser(userToken);
+    this.ws = new ReconnectWebsocket(config.wsUrl);
     // var ws = new WebSocket("ws://192.168.99.100:9503");
     this.ws.onopen = evt => {
       var data = JSON.stringify({
@@ -97,6 +112,7 @@ export default {
           to: msg.to,
           created_at: msg.created_at
         });
+        scrollBottom();
       }
       if (msg.type == "imAction") {
         if (msg.data.length > 0) {
