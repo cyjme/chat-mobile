@@ -1,7 +1,7 @@
 const wsUrl = "wss://msg-server.ideapar.com"
 const apiUrl = "https://msg-server.ideapar.com"
 const qiniu = {
-    fetchTokenUrl:"https://msg.ideapar.com/qiniuToken",
+    fetchTokenUrl:"https://msg-server.ideapar.com/qiniuToken",
     domain:"https://qiniu.ideapar.com/"
 }
 // const wsUrl = "ws://localhost:9009"
