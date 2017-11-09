@@ -2,6 +2,7 @@
   <div id="app">
     <div class="connection" :style="{'display':wsConStatus===true?'none':'block'}">连接中...</div>
     <router-view :contacts="contacts" :newMsg="newMsg" :sendMsg="sendMsg" :loadHistory="loadHistory" :wsConStatus="wsConStatus" :currentUser="currentUser"/>
+    <lg-preview></lg-preview>
   </div>
 </template>
 
@@ -106,7 +107,7 @@ export default {
         this.newMsgFromServer({
           msgId: msg.Id,
           type: "im",
-          contentType: "text",
+          contentType: msg.contentType,
           content: msg.content,
           from: msg.from,
           to: msg.to,
@@ -438,6 +439,7 @@ div.message.right .corner {
   margin: 21px 0 0 21px;
   border: none;
   padding: 0;
+  margin-left: 46px;
   font-size: 14px;
   font-family: "Open Sans", sans-serif;
   font-weight: 400px;
@@ -565,5 +567,22 @@ div.message.right .corner {
   z-index: 100;
   background: rgba(255, 197, 66, 0.62);
   text-align: center;
+}
+
+#sendmessage img {
+  height: 28px;
+  position: absolute;
+  width: 40px;
+  margin: auto;
+  top: 0;
+  left: 6px;
+  bottom: 0;
+}
+
+.img-msg {
+  float: none !important;
+  width: 200px !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
 }
 </style>
