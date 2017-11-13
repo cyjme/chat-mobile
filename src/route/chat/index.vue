@@ -32,8 +32,8 @@
             <button id="send" @click="handleClickSend"></button>
         </div>
     
-    </div>        
     <img :src="profile==null?'':profile.avatar" class="floatingImg">
+    </div>        
 
 </div>
 </template>

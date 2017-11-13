@@ -220,7 +220,7 @@ body {
   width: 68px;
   height: 68px;
   border-radius: 50%;
-  position: absolute;
+  position: fixed;
   top: 32px;
   left: 0;
   right: 0;
@@ -586,9 +586,8 @@ div.message.right .corner {
   margin: 0 !important;
 }
 
-
 @media (min-width: 700px) {
-  #chatbox{
+  #chatbox {
     width: 1000px;
     height: 600px;
     left: 0;
@@ -596,6 +595,40 @@ div.message.right .corner {
     right: 0;
     bottom: 0;
     margin: auto;
+  }
+
+  #chatview {
+    position: absolute;
+    width: 1000px;
+    height: 600px;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+  }
+
+  #profile {
+    position: absolute;
+  }
+  #chat-messages {
+    position: absolute;
+  }
+  #sendmessage {
+    position: absolute;
+  }
+
+  .floatingImg {
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    position: absolute;
+    top: 32px;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    border: 3px solid #fff;
   }
 }
 </style>
