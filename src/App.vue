@@ -585,4 +585,17 @@ div.message.right .corner {
   border-radius: 0 !important;
   margin: 0 !important;
 }
+
+
+@media (min-width: 700px) {
+  #chatbox{
+    width: 1000px;
+    height: 600px;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+  }
+}
 </style>
