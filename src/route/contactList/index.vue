@@ -12,7 +12,8 @@
 
       <div id="friends">
       	<div class="friend" v-for="contact in contacts" :key="contact.token" @click="handleClick(contact.token)">
-          	<img :src="contact.avatar" />
+            <div v-if="contact.avatar==''?true:false" class="text-avatar">{{contact.name.substring(0,1)}}</div>
+          	<img v-if="contact.avatar==''?false:true" :src="contact.avatar" />
               <p>
               	<strong>{{contact.name}}</strong>
                   <br />

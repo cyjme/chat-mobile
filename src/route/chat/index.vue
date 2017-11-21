@@ -32,7 +32,11 @@
             <button id="send" @click="handleClickSend"></button>
         </div>
     
-    <img :src="profile==null?'':profile.avatar" class="floatingImg">
+    <!-- <img :src="profile==null?'':profile.avatar" class="floatingImg"> -->
+    <template v-if="profile==null?false:true">
+      <div v-if="profile.avatar==''?true:false" class="text-avatar-chat floatingImg">{{profile.name.substring(0,1)}}</div>
+      <img v-if="profile.avatar==''?false:true" :src="profile.avatar" class="floatingImg"/>
+    </template> 
     </div>        
 
 </div>

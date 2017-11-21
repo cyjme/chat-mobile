@@ -586,6 +586,33 @@ div.message.right .corner {
   margin: 0 !important;
 }
 
+#friends {
+  overflow-y: scroll;
+  height: 100%;
+}
+.text-avatar {
+  width: 40px;
+  border-radius: 50%;
+  margin: 15px;
+  float: left;
+  font-size: 24px;
+  display: block;
+  background: #d81f06;
+  height: 40px;
+  text-align: center;
+  line-height: 40px;
+  color: #fff;
+}
+
+.text-avatar-chat {
+  float: left;
+  font-size: 24px;
+  background: #d81f06;
+  text-align: center;
+  line-height: 68px;
+  color: #fff;
+}
+
 @media (min-width: 700px) {
   #chatbox {
     width: 1000px;
@@ -630,7 +657,6 @@ div.message.right .corner {
     margin-right: auto;
     border: 3px solid #fff;
   }
-
   #friends {
     overflow-y: scroll;
     height: 470px;
