@@ -630,5 +630,10 @@ div.message.right .corner {
     margin-right: auto;
     border: 3px solid #fff;
   }
+
+  #friends {
+    overflow-y: scroll;
+    height: 470px;
+  }
 }
 </style>
