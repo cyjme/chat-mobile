@@ -15,6 +15,7 @@ export default {
   name: "app",
   data() {
     return {
+      jwtToken:null,
       wsConStatus: false,
       ws: null,
       contacts: [],
@@ -28,8 +29,8 @@ export default {
     };
   },
   methods: {
-    fetchCurrentUser: function(token) {
-      this.axios.get(`/accs/${token}`).then(({ data }) => {
+    fetchCurrentUser: function() {
+      this.axios.get(`/currentUserInfo`).then(({ data }) => {
         this.currentUser = data;
       });
     },
@@ -54,7 +55,7 @@ export default {
       this.ws.send(JSON.stringify(msg));
     },
     listContacts: function(userToken) {
-      this.axios.get(`/acc/${userToken}/contacts`).then(({ data }) => {
+      this.axios.get(`/contacts`).then(({ data }) => {
         this.contacts = [];
         data.map(item => {
           item.msgs = [];
@@ -86,18 +87,29 @@ export default {
     }
   },
   created: function() {
-    let userToken = this.$route.params.token;
-    this.fetchCurrentUser(userToken);
+    // get jwtToken
+    if(this.jwtToken ==null){
+      if(this.$route.params.query.jwtToken!=null){
+        this.jwtToken = this.$route.params.query.jwtToken
+      }else{
+        window.location = "http://localhost:9009/login"
+      }
+    }
+    this.axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.jwtToken;
+
+    //fetchCurrentUser
+    // let userToken = this.$route.params.token;
+    this.fetchCurrentUser();
     this.ws = new ReconnectWebsocket(config.wsUrl);
     // var ws = new WebSocket("ws://192.168.99.100:9503");
     this.ws.onopen = evt => {
       var data = JSON.stringify({
         type: "login",
-        token: userToken
+        token: this.currentUser.userId 
       });
       this.ws.send(data);
       this.wsConStatus = true;
-      this.listContacts(userToken);
+      this.listContacts();
     };
 
     this.ws.onmessage = evt => {
