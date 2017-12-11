@@ -8,12 +8,12 @@ Vue.use(Router);
 export default new Router({
   routes: [
     {
-      path: '/user/:token',
+      path: '/',
       name: 'ContactList',
       component: ContactList,
     },
     {
-      path: '/chat/:token/:toToken',
+      path: '/chat/to/:toUser',
       name: 'Chat',
       component: Chat,
     },

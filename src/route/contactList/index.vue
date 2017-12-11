@@ -5,19 +5,19 @@
         <div class="left"></div>
         <div class="right">
           <span>
-          {{currentUser.name}}
+          {{currentUser.nick}}
           </span>
         </div>
       </div>
 
       <div id="friends">
-      	<div class="friend" v-for="contact in contacts" :key="contact.token" @click="handleClick(contact.token)">
-            <div v-if="contact.avatar==''?true:false" class="text-avatar">{{contact.name.substring(0,1)}}</div>
-          	<img v-if="contact.avatar==''?false:true" :src="contact.avatar" />
+      	<div class="friend" v-for="contact in contacts" :key="contact.token" @click="handleClick(contact.userId)">
+            <div v-if="contact.avt==''?true:false" class="text-avatar">{{contact.nick.substring(0,1)}}</div>
+            <img v-if="contact.avt==''?false:true" :src="contact.avt" />
               <p>
-              	<strong>{{contact.name}}</strong>
+              	<strong>{{contact.nick}}</strong>
                   <br />
-	              <span>{{contact.info}}</span>
+	              <span>{{contact.phone}}</span>
               </p>
               <div class="status available"></div>
           </div>
@@ -38,13 +38,11 @@ export default {
   props: ["contacts", "newMsg", "currentUser"],
   created: function() {},
   methods: {
-    handleClick(token) {
-      let userToken = this.$route.params.token;
+    handleClick(toUserId) {
       this.$router.push({
         name: "Chat",
         params: {
-          token: userToken,
-          toToken: token
+          toUser: toUserId 
         }
       });
       scrollBottom();

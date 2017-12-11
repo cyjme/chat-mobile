@@ -6,13 +6,13 @@
                 <div class="cy s1 s2 s3"></div>
                 <div class="cx s1 s2 s3"></div>
             </div>
-            <p>{{profile==null?"":profile.name}}</p>
-            <span>{{profile==null?"":profile.info}}</span>
+            <p>{{profile==null?"":profile.nick}}</p>
+            <span>{{profile==null?"":profile.phone}}</span>
         </div>
         <div id="chat-messages" v-on:scroll="handleScroll">
         	<label>已经到顶端了</label>
             <div  v-for="msg in msgList" :class="msg.to==to?'message right':'message'" :key="msg.msgId">
-            	<img :src="msg.to == to?currentUser.avatar:toUser.avatar" />
+            	<img :src="msg.to == to?currentUser.avt:profile.avt" />
                 <div class="bubble">
                   <template v-if="msg.contentType==='img'">
                     <img v-preview="msg.content" :src="msg.content" class="img-msg">
@@ -34,8 +34,8 @@
     
     <!-- <img :src="profile==null?'':profile.avatar" class="floatingImg"> -->
     <template v-if="profile==null?false:true">
-      <div v-if="profile.avatar==''?true:false" class="text-avatar-chat floatingImg">{{profile.name.substring(0,1)}}</div>
-      <img v-if="profile.avatar==''?false:true" :src="profile.avatar" class="floatingImg"/>
+      <div v-if="profile.avt==''?true:false" class="text-avatar-chat floatingImg">{{profile.nick.substring(0,1)}}</div>
+      <img v-if="profile.avt==''?false:true" :src="profile.avt" class="floatingImg"/>
     </template> 
     </div>        
 
@@ -52,10 +52,7 @@ export default {
   props: ["contacts", "newMsg", "sendMsg", "loadHistory", "currentUser"],
   data() {
     return {
-      from: this.$route.params.token,
-      to: this.$route.params.toToken,
-      fromUser: {},
-      toUser: {},
+      to: this.$route.params.toUser,
       inputText: ""
     };
   },
@@ -63,14 +60,13 @@ export default {
     handleScroll: function() {
       let chatMessages = document.getElementById("chat-messages");
       if (chatMessages.scrollTop == 0) {
-        this.loadHistory(this.from, this.to);
+        this.loadHistory(this.currentUser.userId, this.to);
       }
     },
     goToContacts: function() {
       this.$router.push({
         name: "ContactList",
         params: {
-          accToken: this.from
         }
       });
     },
@@ -79,13 +75,13 @@ export default {
         type: "im",
         contentType: "text",
         content: this.inputText,
-        from: this.from,
+        from: this.currentUser.userId,
         to: this.to
       });
       this.inputText = "";
     },
     addUploadEvent: function() {
-      let from = this.from;
+      let from = this.currentUser.userId;
       let to = this.to;
       let sendMsg = this.sendMsg;
       // 更多配置，参考https://github.com/lsxiao/qiniu4js
@@ -151,16 +147,10 @@ export default {
   },
   created: function() {
     this.axios
-      .post(`/acc/${this.from}/contacts`, { contactAccToken: this.to })
+      .post(`/contacts`, { contactUserId: this.to })
       .then(data => {
         console.warn("create contact", data);
       });
-
-    this.contacts.map(item => {
-      if (item.token == this.to) {
-        this.toUser = item;
-      }
-    });
   },
   mounted: function() {
     console.warn("mounted");
@@ -170,7 +160,7 @@ export default {
     msgList: function msgList() {
       let msgs = [];
       this.contacts.map(item => {
-        if (item.token === this.to) {
+        if (item.userId === this.to) {
           msgs = item.msgs;
         }
       });
@@ -179,7 +169,7 @@ export default {
     profile: function profile() {
       let contact;
       this.contacts.map((item, index) => {
-        if (item.token === this.to) {
+        if (item.userId === this.to) {
           contact = item;
         }
       });

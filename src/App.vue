@@ -20,6 +20,7 @@ export default {
       ws: null,
       contacts: [],
       currentUser: {
+        userId: "",
         token: "",
         name: "",
         props: "",
@@ -36,17 +37,17 @@ export default {
     },
     newMsg: function(msg) {
       this.contacts.map((item, index) => {
-        if (item.token === msg.to) {
+        if (item.userId === msg.to) {
           this.contacts[index].msgs.push(msg);
         }
       });
     },
     newMsgFromServer: function(msg) {
       this.contacts.map((item, index) => {
-        if (item.token === msg.from) {
+        if (item.userId === msg.from) {
           this.contacts[index].msgs.push(msg);
         }
-        if (item.token === msg.to) {
+        if (item.userId === msg.to) {
           this.contacts[index].msgs.push(msg);
         }
       });
@@ -54,20 +55,20 @@ export default {
     sendMsg: function(msg) {
       this.ws.send(JSON.stringify(msg));
     },
-    listContacts: function(userToken) {
+    listContacts: function() {
       this.axios.get(`/contacts`).then(({ data }) => {
         this.contacts = [];
         data.map(item => {
           item.msgs = [];
           this.contacts.push(item);
-          this.loadHistory(userToken, item.token);
+          this.loadHistory(this.currentUser.userId,item.userId);
         });
       });
     },
-    loadHistory: function(accToken, withAccToken) {
+    loadHistory: function(userId, withUserId) {
       let sinceId = 999999999;
       this.contacts.map((item, index) => {
-        if (item.token === withAccToken) {
+        if (item.userId === withUserId) {
           if (item.msgs[0] !== undefined) {
             sinceId = item.msgs[0].id;
           }
@@ -76,8 +77,8 @@ export default {
       let msg = {
         type: "imAction",
         actionType: "listHistory",
-        accToken: accToken,
-        withAccToken: withAccToken,
+        userId: userId,
+        withUserId: withUserId,
         sinceId: sinceId,
         num: 10
       };
@@ -88,9 +89,10 @@ export default {
   },
   created: function() {
     // get jwtToken
-    if(this.jwtToken ==null){
-      if(this.$route.params.query.jwtToken!=null){
-        this.jwtToken = this.$route.params.query.jwtToken
+    if(this.jwtToken == null){
+      console.warn(this.$route.query)
+      if(this.$route.query.jwtToken!=null){
+        this.jwtToken = this.$route.query.jwtToken
       }else{
         window.location = "http://localhost:9009/login"
       }
