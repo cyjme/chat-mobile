@@ -30,8 +30,8 @@ export default {
     };
   },
   methods: {
-    fetchCurrentUser: function() {
-      this.axios.get(`/currentUserInfo`).then(({ data }) => {
+    fetchCurrentUser: async function() {
+      await this.axios.get(`/currentUserInfo`).then(({ data }) => {
         this.currentUser = data;
       });
     },
@@ -87,24 +87,37 @@ export default {
       }
     }
   },
-  created: function() {
+  created: async function() {
     // get jwtToken
     if(this.jwtToken == null){
-      console.warn(this.$route.query)
       if(this.$route.query.jwtToken!=null){
         this.jwtToken = this.$route.query.jwtToken
+        if(this.$route.query.contactUser != undefined){
+          this.$router.push({
+            name: "Chat",
+            params: {
+              toUser: this.$route.query.contactUser
+            }
+          });
+        }
       }else{
-        window.location = "http://localhost:9009/login"
+        if(this.$route.query.contactUser != undefined){
+          window.location = `${config.apiUrl}/login?contactUser=${this.$route.query.contactUser}`
+          return
+        }
+        window.location = `${config.apiUrl}/login`
+        return
       }
     }
     this.axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.jwtToken;
 
     //fetchCurrentUser
     // let userToken = this.$route.params.token;
-    this.fetchCurrentUser();
+    await this.fetchCurrentUser();
     this.ws = new ReconnectWebsocket(config.wsUrl);
     // var ws = new WebSocket("ws://192.168.99.100:9503");
     this.ws.onopen = evt => {
+      console.warn("userId in websocket",this.currentUser);
       var data = JSON.stringify({
         type: "login",
         token: this.currentUser.userId 
@@ -134,7 +147,7 @@ export default {
           let msgs = msg.data;
           let contactIndex;
           this.contacts.map((item, index) => {
-            if (item.token == msg.withAccToken) {
+            if (item.userId == msg.withUserId) {
               contactIndex = index;
             }
           });
