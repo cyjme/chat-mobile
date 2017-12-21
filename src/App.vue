@@ -410,11 +410,32 @@ body {
   width: 30px;
   margin-top: 12px;
 }
+
 #chat-messages div.message.right img {
   float: right;
   margin-left: 0;
   margin-right: -38px;
 }
+
+#chat-messages .message .text-avatar {
+  float: left;
+  margin-left: -38px;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  margin: 12px 12px 0 -38px;
+  font-size: 24px;
+  background: #d81f06;
+  text-align: center;
+  line-height: 24px;
+  color: #fff;
+}
+
+#chat-messages div.message.right .text-avatar{
+    float: right;
+    margin: 12px -38px 0 0;
+}
+
 .message .bubble {
   background: #f0f4f7;
   font-size: 13px;
