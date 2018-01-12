@@ -120,7 +120,7 @@ export default {
       console.warn("userId in websocket",this.currentUser);
       var data = JSON.stringify({
         type: "login",
-        token: this.currentUser.userId 
+        token: this.currentUser.userId
       });
       this.ws.send(data);
       this.wsConStatus = true;
@@ -316,7 +316,7 @@ body {
 }
 #profile {
   position: fixed;
-  height: 180px;
+  height: 50px;
   width: 100%;
   overflow: hidden;
   text-align: center;
@@ -341,7 +341,7 @@ body {
 #profile p {
   font-weight: 600;
   font-size: 15px;
-  margin: 118px 0 -1px;
+  /*margin: 118px 0 -1px;*/
   opacity: 100;
   -webkit-transition: all 200ms cubic-bezier(0, 0.995, 0.99, 1);
   -moz-transition: all 200ms cubic-bezier(0, 0.995, 0.99, 1);
@@ -366,7 +366,7 @@ body {
 #chat-messages {
   background: white;
   position: fixed;
-  top: 180px;
+  top: 50px;
   bottom: 60px;
   opacity: 100;
   margin-top: 0;

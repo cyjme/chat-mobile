@@ -1,6 +1,6 @@
 <template>
 <div>
-    <div id="chatview" class="p1">    	
+    <div id="chatview" class="p1">
         <div id="profile">
             <div id="close" @click="goToContacts">
                 <div class="cy s1 s2 s3"></div>
@@ -15,11 +15,11 @@
                 <template v-if="msg.to == to">
                   <div v-if="currentUser.avt==''?true:false" class="text-avatar">{{currentUser.nick.substring(0,1)}}</div>
                   <img v-if="currentUser.avt==''?false:true" :src="currentUser.avt" />
-                </template> 
+                </template>
                 <template v-if="msg.to != to">
                   <div v-if="profile.avt==''?true:false" class="text-avatar">{{profile.nick.substring(0,1)}}</div>
                   <img v-if="profile.avt==''?false:true" :src="profile.avt" />
-                </template> 
+                </template>
             	<!-- <img :src="msg.to == to?currentUser.avt:profile.avt" /> -->
                 <div class="bubble">
                   <template v-if="msg.contentType==='img'">
@@ -39,13 +39,13 @@
         	<input type="text" v-model="inputText" placeholder="please Input" v-on:keyup.enter="handleClickSend"/>
             <button id="send" @click="handleClickSend"></button>
         </div>
-    
+
     <!-- <img :src="profile==null?'':profile.avatar" class="floatingImg"> -->
-    <template v-if="profile==null?false:true">
-      <div v-if="profile.avt==''?true:false" class="text-avatar-chat floatingImg">{{profile.nick.substring(0,1)}}</div>
-      <img v-if="profile.avt==''?false:true" :src="profile.avt" class="floatingImg"/>
-    </template> 
-    </div>        
+    <!--<template v-if="profile==null?false:true">-->
+      <!--<div v-if="profile.avt==''?true:false" class="text-avatar-chat floatingImg">{{profile.nick.substring(0,1)}}</div>-->
+      <!--<img v-if="profile.avt==''?false:true" :src="profile.avt" class="floatingImg"/>-->
+    <!--</template> -->
+    </div>
 
 </div>
 </template>
