@@ -25,7 +25,14 @@
                   <template v-if="msg.contentType==='img'">
                     <img v-preview="msg.content" :src="msg.content" class="img-msg">
                   </template>
-                  <template v-else>
+                  <template v-if="msg.contentType==='file'">
+                    <!--<img v-preview="msg.content" :src="msg.content" class="img-msg">-->
+                    <a :href="msg.content">
+                    <div class="file">
+                    </div>
+                    </a>
+                  </template>
+                  <template v-if="msg.contentType==='text'">
                     {{msg.content}}
                   </template>
                     <div class="corner"></div>
@@ -99,7 +106,7 @@ export default {
         .retry(0) //设置重传次数，默认0，不重传
         .auto(true) //选中文件后立即上传，默认true
         .multiple(true) //是否支持多文件选中，默认true
-        .accept(["image/*"]) //过滤文件，默认无，详细配置见http://www.w3schools.com/tags/att_input_accept.asp
+        // .accept(["image/*"]) //过滤文件，默认无，详细配置见http://www.w3schools.com/tags/att_input_accept.asp
         .tokenShare(true)
         // 设置token获取URL：客户端向该地址发送HTTP GET请求, 若成功，服务器端返回{"uptoken": 'i-am-token'}。
         .tokenUrl(config.qiniu.fetchTokenUrl)
@@ -123,11 +130,16 @@ export default {
             //一个任务上传成功后回调
             console.warn(task.key);
             console.warn("up success");
+            console.warn(task);
             let content = config.qiniu.domain + task.key;
+            let contentType = 'file';
+            if(task.file.type == "image/png"){
+              contentType = "img"
+            }
             let msg = {
               type: "im",
               content: content,
-              contentType: "img",
+              contentType: contentType,
               from: from,
               to: to
             };

@@ -450,6 +450,13 @@ body {
   position: relative;
   float: left;
 }
+
+.message .bubble .file {
+  padding: 5px;
+  width: 40px;
+  height: 40px;
+  background: url("assets/download.png") no-repeat;
+}
 #chat-messages div.message.right .bubble {
   float: right;
   border-radius: 5px 5px 0px 5px;
