@@ -33,6 +33,7 @@ export default {
     fetchCurrentUser: async function() {
       await this.axios.get(`/currentUserInfo`).then(({ data }) => {
         this.currentUser = data;
+        console.warn(data)
       });
     },
     newMsg: function(msg) {
@@ -113,6 +114,7 @@ export default {
 
     //fetchCurrentUser
     // let userToken = this.$route.params.token;
+    console.warn(this.jwtToken);
     await this.fetchCurrentUser();
     this.ws = new ReconnectWebsocket(config.wsUrl);
     // var ws = new WebSocket("ws://192.168.99.100:9503");
@@ -286,8 +288,8 @@ body {
   background: #eaeef0;
 }
 #search {
-  background: #e3e9ed
-    url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/search.png") -11px 0 no-repeat;
+  background: #e3e9ed;
+    /*url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/search.png") -11px 0 no-repeat;*/
   height: 60px;
   width: 100%;
   position: absolute;
@@ -327,9 +329,9 @@ body {
   border-bottom-right-radius: 4px;
 }
 .p1 #profile {
-  background: #fff
-    url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/timeline1.png") 0 0
-    no-repeat;
+  background: #f16a70;
+    /*url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/timeline1.png") 0 0*/
+    /*no-repeat;*/
   background-size: 100%;
 }
 #profile .avatar {
@@ -341,7 +343,8 @@ body {
 #profile p {
   font-weight: 600;
   font-size: 15px;
-  /*margin: 118px 0 -1px;*/
+  line-height: 15px;
+  margin-top: 10px;
   opacity: 100;
   -webkit-transition: all 200ms cubic-bezier(0, 0.995, 0.99, 1);
   -moz-transition: all 200ms cubic-bezier(0, 0.995, 0.99, 1);
@@ -437,6 +440,7 @@ body {
 }
 
 .message .bubble {
+  margin-bottom: 30px;
   background: #f0f4f7;
   font-size: 13px;
   font-weight: 600;
@@ -490,20 +494,24 @@ div.message.right .corner {
   margin-left: 46px;
   font-size: 14px;
   font-family: "Open Sans", sans-serif;
-  font-weight: 400px;
+  font-weight: 400;
   color: #aab8c2;
 }
 #sendmessage input:focus {
   outline: 0;
 }
 #sendmessage button {
-  background: #fff
-    url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/send.png") 0 -41px no-repeat;
+  color: #aab8c2;
+  font-size: 14px;
+  font-weight: 400;
+  background: #fff;
+  /*background: #fff*/
+    /*url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/send.png") 0 -41px no-repeat;*/
   width: 30px;
   height: 30px;
   position: absolute;
   right: 15px;
-  top: 23px;
+  top: 15px;
   border: none;
 }
 #sendmessage button:hover {
@@ -620,7 +628,6 @@ div.message.right .corner {
 #sendmessage img {
   height: 28px;
   position: absolute;
-  width: 40px;
   margin: auto;
   top: 0;
   left: 6px;

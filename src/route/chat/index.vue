@@ -36,8 +36,8 @@
 
         <div id="sendmessage">
           <img src="../../assets/img.png" class="img" id="upload-img">
-        	<input type="text" v-model="inputText" placeholder="please Input" v-on:keyup.enter="handleClickSend"/>
-            <button id="send" @click="handleClickSend"></button>
+        	<input type="text" v-model="inputText" placeholder="请输入" v-on:keyup.enter="handleClickSend"/>
+            <button id="send" @click="handleClickSend">发送</button>
         </div>
 
     <!-- <img :src="profile==null?'':profile.avatar" class="floatingImg"> -->

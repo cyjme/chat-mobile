@@ -22,9 +22,9 @@
           <div class="status available"></div>
         </div>
 
-        <div id="search">
-          <input type="text" id="searchfield" placeholder="Search contacts..."/>
-        </div>
+        <!--<div id="search">-->
+          <!--<input type="text" id="searchfield" placeholder="Search contacts..."/>-->
+        <!--</div>-->
       </div>
     </div>
   </div>
