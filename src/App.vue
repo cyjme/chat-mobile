@@ -332,7 +332,7 @@ body {
   background: #f16a70;
     /*url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/timeline1.png") 0 0*/
     /*no-repeat;*/
-  background-size: 100%;
+  /*background-size: 100%;*/
 }
 #profile .avatar {
   width: 68px;
@@ -675,6 +675,15 @@ div.message.right .corner {
   color: #fff;
 }
 
+.backBtn img{
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
 @media (min-width: 700px) {
   #chatbox {
     width: 1000px;
@@ -705,6 +714,14 @@ div.message.right .corner {
   }
   #sendmessage {
     position: absolute;
+  }
+  .backBtn img{
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
   }
 
   .floatingImg {

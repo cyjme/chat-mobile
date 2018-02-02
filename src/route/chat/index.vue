@@ -2,7 +2,10 @@
 <div>
     <div id="chatview" class="p1">
         <div id="profile">
-            <div id="close" @click="goToContacts">
+            <div class="backBtn" @click="goToContacts">
+                <img src="../../assets/left.png">
+            </div>
+            <div id="close" @click="goToContacts" style="display: none">
                 <div class="cy s1 s2 s3"></div>
                 <div class="cx s1 s2 s3"></div>
             </div>
