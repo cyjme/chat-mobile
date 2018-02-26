@@ -136,7 +136,7 @@ export default {
             console.warn(task);
             let content = config.qiniu.domain + task.key;
             let contentType = 'file';
-            if(task.file.type == "image/png"){
+            if(task.file.type.indexOf("image") > -1){
               contentType = "img"
             }
             let msg = {
