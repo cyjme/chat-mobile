@@ -2,7 +2,7 @@
   <div id="chatbox">
     <div id="friendslist">
       <div id="topmenu">
-        <div class="left"></div>
+        <a href="https://www.ideapar.com"><div class="left"></div></a>
         <div class="right">
           <span>
           {{currentUser.nick}}

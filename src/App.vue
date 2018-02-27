@@ -220,12 +220,12 @@ body {
 #topmenu .left {
   float: left;
   height: 100%;
-  width: 50%;
+  width: 100px;
 }
 #topmenu .right {
-  float: left;
+  float: right;
   height: 100%;
-  width: 50%;
+  margin-right: 40px;
   text-align: center;
   line-height: 69px;
   font-size: x-large;
