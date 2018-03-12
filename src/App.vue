@@ -66,8 +66,21 @@
             this.loadHistory(this.currentUser.userId, item.userId);
           });
           console.warn("this contacts", this.contacts);
-
+          this.getUnreadCount()
         });
+      },
+      getUnreadCount: function () {
+        this.axios.get(`/getUnreadMsgCount`).then(({data}) => {
+          console.warn("getUnreadMsgCount", data)
+          data.map(contact => {
+            this.contacts.map((item, index) => {
+              if (item.userId == contact.contactUserId) {
+                item.unreadCount = contact.unreadMsgCount
+                this.contacts.splice(index, 1, item)
+              }
+            });
+          })
+        })
       },
       loadHistory: function (userId, withUserId) {
         let sinceId = 999999999;
@@ -314,13 +327,15 @@
   }
 
   .friend .status {
-    background: #26c281;
+    background: red;
     border-radius: 50%;
-    width: 9px;
-    height: 9px;
+    width: 16px;
+    height: 16px;
     position: absolute;
     top: 31px;
     right: 17px;
+    text-align: center;
+    color: #fff;
   }
 
   .friend .status.away {
