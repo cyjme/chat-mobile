@@ -17,11 +17,11 @@
             <div  v-for="msg in msgList" :class="msg.to==to?'message right':'message'" :key="msg.msgId">
                 <template v-if="msg.to == to">
                   <div v-if="currentUser.avt==''?true:false" class="text-avatar">{{currentUser.nick.substring(0,1)}}</div>
-                  <img v-if="currentUser.avt==''?false:true" :src="currentUser.avt" />
+                  <img v-if="currentUser.avt==''?false:true" :src="'https://qiniu.ideapar.com/'+JSON.parse(currentUser.avt)[0]+'?imageMogr2/thumbnail/80x/strip/quality/50/format/jpg'"/>
                 </template>
                 <template v-if="msg.to != to">
                   <div v-if="profile.avt==''?true:false" class="text-avatar">{{profile.nick.substring(0,1)}}</div>
-                  <img v-if="profile.avt==''?false:true" :src="profile.avt" />
+                  <img v-if="profile.avt==''?false:true" :src="'https://qiniu.ideapar.com/'+JSON.parse(profile.avt)[0]+'?imageMogr2/thumbnail/80x/strip/quality/50/format/jpg'"/>
                 </template>
             	<!-- <img :src="msg.to == to?currentUser.avt:profile.avt" /> -->
                 <div class="bubble">
