@@ -13,7 +13,7 @@
       <div id="friends">
         <div class="friend" v-for="contact in contacts" :key="contact.token" @click="handleClick(contact.userId)">
           <div v-if="contact.avt==''?true:false" class="text-avatar">{{contact.nick.substring(0,1)}}</div>
-          <img v-if="contact.avt==''?false:true" :src="contact.avt"/>
+          <img v-if="contact.avt==''?false:true" :src="'https://qiniu.ideapar.com/'+JSON.parse(contact.avt)[0]+'?imageMogr2/thumbnail/80x/strip/quality/50/format/jpg'"/>
           <p>
             <strong>{{contact.nick}}</strong>
             <br/>
