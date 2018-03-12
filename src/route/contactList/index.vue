@@ -22,7 +22,9 @@
             <br/>
             <span>{{contact.phone}}</span>
           </p>
-          <div class="status available">{{contact.hasOwnProperty('unreadCount')==true? contact.unreadCount:''}}</div>
+          <div class="status available" v-if="contact.hasOwnProperty('unreadCount')==true">
+            {{contact.hasOwnProperty('unreadCount')==true? contact.unreadCount:''}}
+          </div>
         </div>
 
         <!--<div id="search">-->
