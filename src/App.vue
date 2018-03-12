@@ -174,7 +174,7 @@
         //sort by lastMsgTime
         this.contacts.sort(function (a, b) {
           if (a.msgs.length == 0 || b.msgs.length == 0) {
-            return 0
+            return 1
           }
           if (a.msgs[a.msgs.length - 1].created_at > b.msgs[b.msgs.length - 1].created_at) {
             return -1
