@@ -22,7 +22,7 @@
             <br/>
             <span>{{contact.phone}}</span>
           </p>
-          <div class="status available" v-if="!contact.hasOwnProperty('unreadCount')==true">
+          <div class="status available" v-if="contact.hasOwnProperty('unreadCount')==true">
             {{contact.hasOwnProperty('unreadCount')==true? contact.unreadCount:''}}
           </div>
           <div v-if="contact.msgs.length>0" style="position: absolute;top: 50px;right: 40px">
