@@ -22,8 +22,17 @@
             <br/>
             <span>{{contact.phone}}</span>
           </p>
-          <div class="status available" v-if="contact.hasOwnProperty('unreadCount')==true">
+          <div class="status available" v-if="!contact.hasOwnProperty('unreadCount')==true">
             {{contact.hasOwnProperty('unreadCount')==true? contact.unreadCount:''}}
+          </div>
+          <div v-if="contact.msgs.length>0" style="position: absolute;top: 50px;right: 40px">
+            {{(new Date() - new Date(contact.msgs[contact.msgs.length-1].created_at))/(24*60*60*1000) > 1? new
+            Date(contact.msgs[contact.msgs.length-1].created_at).getMonth()+1 +'月'+new
+            Date(contact.msgs[contact.msgs.length-1].created_at).getDate() +"日":''}}
+            {{new Date(contact.msgs[contact.msgs.length-1].created_at).getHours()+":"+(new
+            Date(contact.msgs[contact.msgs.length-1].created_at).getMinutes()<10 ? "0"+new
+            Date(contact.msgs[contact.msgs.length-1].created_at).getMinutes(): new
+            Date(contact.msgs[contact.msgs.length-1].created_at).getMinutes())}}
           </div>
         </div>
 
